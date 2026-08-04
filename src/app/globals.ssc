@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,wght@1,500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-tier: 'Fraunces', serif;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(107,47,179,.08), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 5%, rgba(169,129,46,.07), transparent 60%),
+    radial-gradient(ellipse 800px 600px at 50% 115%, rgba(199,125,255,.06), transparent 60%),
+    #F8F4EC;
+  background-attachment: fixed;
+  color: #1C1229;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
