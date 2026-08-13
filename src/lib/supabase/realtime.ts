@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 
@@ -12,15 +12,21 @@ import { createClient } from "@/lib/supabase/client";
  * mantener sincronizada entre dispositivos.
  *
  * Ejemplo: useRealtimeSync("trades", ["trades", accountId]);
+ *
+ * Nota: el nombre del canal incluye un id único por instancia del hook,
+ * porque Supabase Realtime no permite dos canales con el mismo nombre
+ * activos a la vez (pasa cuando dos componentes distintos, como la Edge
+ * Card y el Dashboard, usan la misma tabla al mismo tiempo).
  */
 export function useRealtimeSync(table: string, queryKey: unknown[]) {
   const queryClient = useQueryClient();
+  const instanceId = useId();
 
   useEffect(() => {
     const supabase = createClient();
 
     const channel = supabase
-      .channel(`realtime:${table}:${JSON.stringify(queryKey)}`)
+      .channel(`realtime:${table}:${JSON.stringify(queryKey)}:${instanceId}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table },
@@ -34,5 +40,5 @@ export function useRealtimeSync(table: string, queryKey: unknown[]) {
       supabase.removeChannel(channel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [table, JSON.stringify(queryKey)]);
+  }, [table, JSON.stringify(queryKey), instanceId]);
 }
