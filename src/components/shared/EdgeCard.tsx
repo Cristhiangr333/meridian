@@ -2,9 +2,13 @@
 
 import { useRef } from "react";
 import { useAccount } from "@/lib/hooks/useAccount";
+import { useTrades } from "@/lib/hooks/useTrades";
+import { computeEdgeScore } from "@/lib/metrics";
 
 export function EdgeCard() {
   const { data: account, isLoading } = useAccount();
+  const { data: trades = [] } = useTrades(account?.id);
+  const edgeScore = computeEdgeScore(trades);
   const cardRef = useRef<HTMLDivElement>(null);
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
@@ -84,7 +88,9 @@ export function EdgeCard() {
           <div className="font-mono text-[9.5px] tracking-wider text-white/50 uppercase mb-1">
             Edge score
           </div>
-          <div className="font-mono text-lg font-semibold text-gold-card">—</div>
+          <div className="font-mono text-lg font-semibold text-gold-card">
+            {trades.length === 0 ? "—" : edgeScore}
+          </div>
         </div>
         <div>
           <div className="font-mono text-[9.5px] tracking-wider text-white/50 uppercase mb-1">
