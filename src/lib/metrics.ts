@@ -92,15 +92,70 @@ export function computeDiscipline(trades: Trade[]): number {
   return Math.round(avg * 10);
 }
 
-/** Composite: win rate + profit factor + consistencia + disciplina, ponderado. */
-export function computeEdgeScore(trades: Trade[]): number {
-  if (closedTrades(trades).length === 0) return 0;
-  const winRate = computeWinRate(trades);
-  const pf = computeProfitFactor(trades);
-  const pfNorm = Math.min(100, (pf === Infinity ? 3 : pf) * 33);
-  const consistency = computeConsistency(trades);
-  const discipline = computeDiscipline(trades);
-  return Math.round(
-    winRate * 0.3 + pfNorm * 0.3 + consistency * 0.2 + discipline * 0.2
-  );
+export interface DayTrades {
+  dateKey: string;
+  dayNum: number;
+  trades: Trade[];
+  total: number | null;
+}
+
+/** Agrupa las operaciones de un mes por día calendario. */
+export function computeMonthGrid(
+  trades: Trade[],
+  year: number,
+  month: number
+): DayTrades[] {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const byDay = new Map<string, Trade[]>();
+
+  closedTrades(trades).forEach((t) => {
+    const key = t.opened_at.slice(0, 10);
+    const arr = byDay.get(key) ?? [];
+    arr.push(t);
+    byDay.set(key, arr);
+  });
+
+  const days: DayTrades[] = [];
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateKey = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      d
+    ).padStart(2, "0")}`;
+    const dayTrades = byDay.get(dateKey) ?? [];
+    const total = dayTrades.length
+      ? dayTrades.reduce((s, t) => s + (t.pnl ?? 0), 0)
+      : null;
+    days.push({ dateKey, dayNum: d, trades: dayTrades, total });
+  }
+  return days;
+}
+
+export interface MonthSummary {
+  total: number;
+  winDays: number;
+  bestDay: number | null;
+  currentStreak: number;
+}
+
+/** Resumen del mes: resultado total, días ganadores, mejor día y racha. */
+export function computeMonthSummary(days: DayTrades[]): MonthSummary {
+  let total = 0;
+  let winDays = 0;
+  let bestDay: number | null = null;
+  let streak = 0;
+  let currentStreak = 0;
+
+  days.forEach((d) => {
+    if (d.total === null) return;
+    total += d.total;
+    if (d.total > 0) {
+      winDays += 1;
+      streak += 1;
+      currentStreak = Math.max(currentStreak, streak);
+    } else {
+      streak = 0;
+    }
+    if (bestDay === null || d.total > bestDay) bestDay = d.total;
+  });
+
+  return { total, winDays, bestDay, currentStreak };
 }
