@@ -159,3 +159,16 @@ export function computeMonthSummary(days: DayTrades[]): MonthSummary {
 
   return { total, winDays, bestDay, currentStreak };
 }
+
+/** Composite: win rate + profit factor + consistencia + disciplina, ponderado. */
+export function computeEdgeScore(trades: Trade[]): number {
+  if (closedTrades(trades).length === 0) return 0;
+  const winRate = computeWinRate(trades);
+  const pf = computeProfitFactor(trades);
+  const pfNorm = Math.min(100, (pf === Infinity ? 3 : pf) * 33);
+  const consistency = computeConsistency(trades);
+  const discipline = computeDiscipline(trades);
+  return Math.round(
+    winRate * 0.3 + pfNorm * 0.3 + consistency * 0.2 + discipline * 0.2
+  );
+}
