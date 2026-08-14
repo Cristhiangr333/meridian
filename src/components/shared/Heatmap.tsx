@@ -15,13 +15,16 @@ export function Heatmap({ dailyPnl }: { dailyPnl: Map<string, number> }) {
         let cls = "bg-surface border-hairline";
         if (d.value !== null && d.value > 0) cls = "bg-gain-soft border-gain/30";
         if (d.value !== null && d.value < 0) cls = "bg-loss-soft border-loss/30";
+        const dayNum = parseInt(d.key.slice(8, 10), 10);
 
         return (
           <div
             key={d.key}
             title={d.value !== null ? `${d.key}: $${d.value.toFixed(0)}` : d.key}
-            className={`aspect-square rounded-md border ${cls}`}
-          />
+            className={`h-9 md:h-10 rounded-md border ${cls} flex items-center justify-center`}
+          >
+            <span className="font-mono text-[10px] text-ink-3">{dayNum}</span>
+          </div>
         );
       })}
     </div>
