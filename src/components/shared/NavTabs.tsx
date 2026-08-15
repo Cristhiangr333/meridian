@@ -7,6 +7,7 @@ const TABS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/trades", label: "Registro" },
   { href: "/calendar", label: "Calendario" },
+  { href: "/psychology", label: "Psicología" },
 ];
 
 export function NavTabs() {
