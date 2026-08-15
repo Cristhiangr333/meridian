@@ -2,6 +2,7 @@
 
 import { useAccount } from "@/lib/hooks/useAccount";
 import { useTrades } from "@/lib/hooks/useTrades";
+import { useInsights } from "@/lib/hooks/useInsights";
 import { MetricCard } from "@/components/shared/MetricCard";
 import { EdgeRadar } from "@/components/shared/EdgeRadar";
 import { EquityCurve } from "@/components/shared/EquityCurve";
@@ -22,6 +23,7 @@ import {
 export default function DashboardPage() {
   const { data: account } = useAccount();
   const { data: trades = [], isLoading } = useTrades(account?.id);
+  const { data: insights = [] } = useInsights(1);
 
   const winRate = computeWinRate(trades);
   const expectancy = computeExpectancy(trades);
@@ -96,7 +98,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <AICoachCard trades={trades} />
+      <AICoachCard trades={trades} latestInsight={insights[0]?.content} />
     </div>
   );
 }
