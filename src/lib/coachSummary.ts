@@ -1,21 +1,10 @@
-import type { Trade } from "@/lib/types";
+import type { Trade, PsychologyLog } from "@/lib/types";
 import {
   computeWinRate,
   computeExpectancy,
   computeProfitFactor,
   computeMaxDrawdown,
 } from "@/lib/metrics";
-
-export interface PsychologyLog {
-  id: string;
-  log_date: string;
-  sleep_hours: number | null;
-  confidence: number | null;
-  stress: number | null;
-  focus: number | null;
-  motivation: number | null;
-  notes: string | null;
-}
 
 /** Arma el texto plano que se le envía a Claude como contexto del trader. */
 export function buildCoachSummary(
