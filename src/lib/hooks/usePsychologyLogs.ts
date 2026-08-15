@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { useRealtimeSync } from "@/lib/supabase/realtime";
-import type { PsychologyLog } from "@/lib/coachSummary";
+import type { PsychologyLog } from "@/lib/types";
 
 export function usePsychologyLogs(limit = 30) {
   useRealtimeSync("psychology_logs", ["psychology_logs", limit]);
