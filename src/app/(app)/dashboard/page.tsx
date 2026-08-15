@@ -3,11 +3,13 @@
 import { useAccount } from "@/lib/hooks/useAccount";
 import { useTrades } from "@/lib/hooks/useTrades";
 import { useInsights } from "@/lib/hooks/useInsights";
+import { usePsychologyLogs } from "@/lib/hooks/usePsychologyLogs";
 import { MetricCard } from "@/components/shared/MetricCard";
 import { EdgeRadar } from "@/components/shared/EdgeRadar";
 import { EquityCurve } from "@/components/shared/EquityCurve";
 import { Heatmap } from "@/components/shared/Heatmap";
 import { AICoachCard } from "@/components/shared/AICoachCard";
+import { PsychologyCorrelation } from "@/components/shared/PsychologyCorrelation";
 import {
   computeWinRate,
   computeExpectancy,
@@ -18,12 +20,14 @@ import {
   computeConsistency,
   computeDiscipline,
   computeEdgeScore,
+  computePsychologyCorrelation,
 } from "@/lib/metrics";
 
 export default function DashboardPage() {
   const { data: account } = useAccount();
   const { data: trades = [], isLoading } = useTrades(account?.id);
   const { data: insights = [] } = useInsights(1);
+  const { data: psychologyLogs = [] } = usePsychologyLogs();
 
   const winRate = computeWinRate(trades);
   const expectancy = computeExpectancy(trades);
@@ -35,6 +39,7 @@ export default function DashboardPage() {
   const equitySeries = computeEquitySeries(trades, account?.starting_balance ?? 0);
   const dailyPnl = computeDailyPnl(trades);
   const expectancyNorm = Math.max(0, Math.min(100, 50 + expectancy));
+  const psychologyCorrelation = computePsychologyCorrelation(trades, psychologyLogs);
 
   if (isLoading) {
     return <p className="font-mono text-xs text-ink-3">Cargando tu dashboard...</p>;
@@ -90,12 +95,7 @@ export default function DashboardPage() {
           </p>
           <Heatmap dailyPnl={dailyPnl} />
         </div>
-        <div className="bg-surface-raised backdrop-blur-xl border border-hairline rounded-2xl p-4 md:p-5 flex items-center">
-          <p className="font-mono text-xs text-ink-3 leading-relaxed">
-            El panel de correlación psicológica se activa en el Paso 7, cuando
-            conectemos el Diario Psicológico con tu historial de operaciones.
-          </p>
-        </div>
+        <PsychologyCorrelation data={psychologyCorrelation} />
       </div>
 
       <AICoachCard trades={trades} latestInsight={insights[0]?.content} />
