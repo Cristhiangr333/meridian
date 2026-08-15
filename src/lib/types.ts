@@ -42,3 +42,16 @@ export interface Trade {
   opened_at: string;
   closed_at: string | null;
 }
+
+export interface PsychologyLog {
+  id: string;
+  user_id: string;
+  log_date: string;
+  sleep_hours: number | null;
+  confidence: number | null;
+  stress: number | null;
+  focus: number | null;
+  motivation: number | null;
+  notes: string | null;
+  created_at: string;
+}
