@@ -3,13 +3,25 @@
 // breve y accionable. La llave de Anthropic vive SOLO aquí, nunca en el
 // navegador — se configura como secret en Supabase (ANTHROPIC_API_KEY).
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+// Solo el dominio de producción y los previews de Vercel de ESTE proyecto
+// (ej. meridian-git-feature-x-tuusuario.vercel.app) pueden llamar esta función.
+// Si conectas un dominio propio más adelante, agrégalo aquí también.
+const PRODUCTION_ORIGIN = "https://meridian-gray-nine.vercel.app";
+const ALLOWED_ORIGIN_PATTERN = /^https:\/\/meridian(-[a-z0-9-]+)?\.vercel\.app$/;
+
+function corsHeadersFor(origin: string | null) {
+  const allowOrigin =
+    origin && ALLOWED_ORIGIN_PATTERN.test(origin) ? origin : PRODUCTION_ORIGIN;
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+  };
+}
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = corsHeadersFor(req.headers.get("origin"));
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -39,7 +51,7 @@ Deno.serve(async (req: Request) => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
+        model: "claude-sonnet-5",
         max_tokens: 400,
         system:
           "Eres el AI Coach de Meridian, un trading journal de nivel institucional. Hablas como un mentor de trading experto: directo, específico, basado en datos, sin relleno motivacional vacío. Respondes siempre en español, en 2-4 oraciones máximo. Señalas patrones concretos (setups, dirección, disciplina) y das UNA recomendación accionable. Nunca inventes cifras que no te dieron en el resumen.",
