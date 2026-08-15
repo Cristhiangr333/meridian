@@ -1,4 +1,4 @@
-import type { PsychologyLog } from "@/lib/coachSummary";
+import type { PsychologyLog } from "@/lib/types";
 
 export function PsychologyHistory({ logs }: { logs: PsychologyLog[] }) {
   return (
