@@ -1,7 +1,11 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_ROUTES = ["/dashboard", "/trades", "/calendar", "/psychology"];
+// Fail-closed por diseño: en vez de mantener una lista manual de rutas
+// protegidas (que hay que recordar actualizar cada vez que se agrega un
+// módulo nuevo — Setups, Estadísticas, Objetivos...), se protege TODO por
+// defecto y solo se exceptúan explícitamente las rutas públicas de abajo.
+const PUBLIC_ROUTES = ["/login", "/register"];
 const AUTH_ROUTES = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
@@ -35,10 +39,10 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isProtected = PROTECTED_ROUTES.some((r) => path.startsWith(r));
+  const isPublic = path === "/" || PUBLIC_ROUTES.some((r) => path.startsWith(r));
   const isAuthRoute = AUTH_ROUTES.some((r) => path.startsWith(r));
 
-  if (!user && isProtected) {
+  if (!user && !isPublic) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   if (user && isAuthRoute) {
