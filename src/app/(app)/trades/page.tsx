@@ -6,12 +6,22 @@ import { TradeForm } from "@/components/shared/TradeForm";
 import { TradeLedger } from "@/components/shared/TradeLedger";
 
 export default function TradesPage() {
-  const { data: account } = useAccount();
+  const { data: account, isLoading } = useAccount();
   const { data: trades = [] } = useTrades(account?.id);
+
+  if (isLoading) {
+    return (
+      <p className="font-mono text-xs text-ink-3">Cargando tu cuenta...</p>
+    );
+  }
 
   if (!account) {
     return (
-      <p className="font-mono text-xs text-ink-3">Cargando tu cuenta...</p>
+      <p className="font-mono text-xs text-loss">
+        No encontramos una cuenta de trading asociada a tu perfil. Si acabas
+        de registrarte, escribe a soporte — puede que falte aplicar el script
+        de onboarding en la base de datos.
+      </p>
     );
   }
 
