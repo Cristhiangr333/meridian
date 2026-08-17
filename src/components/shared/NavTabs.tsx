@@ -14,7 +14,7 @@ export function NavTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-1 mb-5 -mt-1 flex-wrap">
+    <div className="flex gap-1 mb-5 -mt-1 flex-wrap md:hidden">
       {TABS.map((tab) => {
         const active = pathname?.startsWith(tab.href);
         return (
