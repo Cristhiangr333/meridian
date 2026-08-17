@@ -38,7 +38,7 @@ export function EdgeCard() {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden rounded-2xl p-6 md:p-7 mb-5 transition-transform duration-150 ease-out"
+      className="relative overflow-hidden rounded-2xl p-6 mb-5 w-full md:max-w-[380px] transition-transform duration-150 ease-out"
       style={{
         background:
           "radial-gradient(circle at 15% 0%, rgba(232,200,120,.3), transparent 55%), linear-gradient(125deg, #241145 0%, #4B1F82 35%, #8B3FA0 65%, #C77DFF 100%)",
@@ -54,7 +54,7 @@ export function EdgeCard() {
         }}
       />
 
-      <div className="relative z-[2] flex items-center justify-between mb-6 md:mb-7">
+      <div className="relative z-[2] flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <span className="font-display font-bold text-white text-base">M</span>
           <span className="font-mono text-[11px] tracking-[0.22em] text-white/85">
@@ -67,36 +67,36 @@ export function EdgeCard() {
       </div>
 
       <div
-        className="w-10 h-[31px] rounded-md mb-5 md:mb-6"
+        className="w-10 h-[31px] rounded-md mb-5"
         style={{ background: "linear-gradient(135deg,#F3DFA0,#B8934E)" }}
       />
 
-      <div className="relative z-[2] font-mono text-white/90 text-lg tracking-[0.14em] mb-6">
+      <div className="relative z-[2] font-mono text-white/90 text-base tracking-[0.14em] mb-6">
         •••• •••• •••• {last4}
       </div>
 
-      <div className="relative z-[2] flex gap-8 flex-wrap">
+      <div className="relative z-[2] flex items-start justify-between gap-3">
         <div>
-          <div className="font-mono text-[9.5px] tracking-wider text-white/50 uppercase mb-1">
+          <div className="font-mono text-[9px] tracking-wider text-white/50 uppercase mb-1">
             Titular
           </div>
-          <div className="font-display text-sm text-white">
+          <div className="font-display text-[13px] text-white leading-tight">
             {account?.is_funded ? "Cuenta fondeada" : account?.name ?? "Sin cuenta"}
           </div>
         </div>
         <div>
-          <div className="font-mono text-[9.5px] tracking-wider text-white/50 uppercase mb-1">
+          <div className="font-mono text-[9px] tracking-wider text-white/50 uppercase mb-1">
             Edge score
           </div>
-          <div className="font-mono text-lg font-semibold text-gold-card">
+          <div className="font-mono text-base font-semibold text-gold-card">
             {trades.length === 0 ? "—" : edgeScore}
           </div>
         </div>
         <div>
-          <div className="font-mono text-[9.5px] tracking-wider text-white/50 uppercase mb-1">
+          <div className="font-mono text-[9px] tracking-wider text-white/50 uppercase mb-1">
             Balance
           </div>
-          <div className="font-mono text-lg font-semibold text-gold-card">
+          <div className="font-mono text-base font-semibold text-gold-card">
             {isLoading ? "…" : `$${balance.toLocaleString("es")}`}
           </div>
         </div>
