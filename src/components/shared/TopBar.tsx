@@ -4,14 +4,20 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/hooks/useProfile";
+import { getNySessionStatus } from "@/lib/marketSession";
 
 export function TopBar() {
   const router = useRouter();
   const { data: profile } = useProfile();
   const [clock, setClock] = useState("--:--:--");
+  const [session, setSession] = useState(() => getNySessionStatus());
 
   useEffect(() => {
-    const tick = () => setClock(new Date().toTimeString().slice(0, 8));
+    const tick = () => {
+      const now = new Date();
+      setClock(now.toTimeString().slice(0, 8));
+      setSession(getNySessionStatus(now));
+    };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
@@ -41,9 +47,19 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex items-center gap-1.5 bg-gain-soft border border-gain/25 text-gain font-mono text-[11px] px-3 py-1.5 rounded-full">
-          <span className="w-1.5 h-1.5 rounded-full bg-gain animate-pulse" />
-          Sesión NY abierta
+        <div
+          className={`flex items-center gap-1.5 border font-mono text-[11px] px-3 py-1.5 rounded-full ${
+            session.isOpen
+              ? "bg-gain-soft border-gain/25 text-gain"
+              : "bg-hairline/40 border-hairline-strong text-ink-3"
+          }`}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              session.isOpen ? "bg-gain animate-pulse" : "bg-ink-3"
+            }`}
+          />
+          {session.label}
         </div>
         <div className="font-mono text-[13px] text-ink-2 min-w-[88px] text-right">
           {clock}
