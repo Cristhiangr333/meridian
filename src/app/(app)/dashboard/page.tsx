@@ -5,6 +5,7 @@ import { useTrades } from "@/lib/hooks/useTrades";
 import { useInsights } from "@/lib/hooks/useInsights";
 import { usePsychologyLogs } from "@/lib/hooks/usePsychologyLogs";
 import { MetricCard } from "@/components/shared/MetricCard";
+import { EdgeCard } from "@/components/shared/EdgeCard";
 import { EdgeRadar } from "@/components/shared/EdgeRadar";
 import { EquityCurve } from "@/components/shared/EquityCurve";
 import { Heatmap } from "@/components/shared/Heatmap";
@@ -55,6 +56,8 @@ export default function DashboardPage() {
           {trades.length} operaciones registradas
         </p>
       </div>
+
+      <EdgeCard />
 
       <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-3 mb-3">
         <div className="bg-surface-raised backdrop-blur-xl border border-hairline rounded-2xl p-4 flex items-center justify-center">
