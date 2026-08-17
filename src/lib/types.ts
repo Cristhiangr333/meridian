@@ -55,3 +55,11 @@ export interface PsychologyLog {
   notes: string | null;
   created_at: string;
 }
+
+export interface Setup {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+}
