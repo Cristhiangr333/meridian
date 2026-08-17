@@ -1,99 +1,106 @@
-function pt(cx: number, cy: number, angleDeg: number, r: number) {
-  const rad = (angleDeg * Math.PI) / 180;
-  return { x: cx + r * Math.sin(rad), y: cy - r * Math.cos(rad) };
-}
+"use client";
 
-export function EdgeRadar({
-  winRate,
-  expectancyNorm,
-  consistency,
-  discipline,
-  score,
-}: {
-  winRate: number;
-  expectancyNorm: number;
-  consistency: number;
-  discipline: number;
-  score: number;
-}) {
-  const cx = 120;
-  const cy = 120;
-  const maxR = 90;
+import { useRef } from "react";
+import { useAccount } from "@/lib/hooks/useAccount";
+import { useTrades } from "@/lib/hooks/useTrades";
+import { computeEdgeScore } from "@/lib/metrics";
 
-  const top = pt(cx, cy, 0, (winRate / 100) * maxR);
-  const right = pt(cx, cy, 90, (expectancyNorm / 100) * maxR);
-  const bottom = pt(cx, cy, 180, (consistency / 100) * maxR);
-  const left = pt(cx, cy, 270, (discipline / 100) * maxR);
-  const points = `${top.x},${top.y} ${right.x},${right.y} ${bottom.x},${bottom.y} ${left.x},${left.y}`;
+export function EdgeCard() {
+  const { data: account, isLoading } = useAccount();
+  const { data: trades = [] } = useTrades(account?.id);
+  const edgeScore = computeEdgeScore(trades);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (py - 0.5) * -7;
+    const ry = (px - 0.5) * 9;
+    card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    card.style.setProperty("--mx", `${px * 100}%`);
+    card.style.setProperty("--my", `${py * 100}%`);
+  }
+
+  function handleMouseLeave() {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+  }
+
+  const last4 = account ? account.id.replace(/-/g, "").slice(-4) : "----";
+  const balance = account ? account.current_balance : 0;
 
   return (
-    <svg
-      viewBox="0 0 240 240"
-      className="w-full max-w-[220px] h-auto mx-auto"
-      role="img"
-      aria-label={`Edge score ${score} de 100`}
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative overflow-hidden rounded-2xl p-6 mb-5 w-full md:max-w-[380px] transition-transform duration-150 ease-out"
+      style={{
+        background:
+          "radial-gradient(circle at 15% 0%, rgba(232,200,120,.3), transparent 55%), linear-gradient(125deg, #241145 0%, #4B1F82 35%, #8B3FA0 65%, #C77DFF 100%)",
+        boxShadow:
+          "0 30px 60px -22px rgba(107,47,179,.4), 0 10px 24px -14px rgba(28,18,41,.18), inset 0 1px 0 rgba(255,255,255,.16)",
+      }}
     >
-      {[22.5, 45, 67.5, 90].map((r) => (
-        <circle
-          key={r}
-          cx={cx}
-          cy={cy}
-          r={r}
-          fill="none"
-          stroke="rgba(28,18,41,.08)"
-          strokeWidth={1}
-        />
-      ))}
-      <line x1={cx} y1={cy - maxR} x2={cx} y2={cy + maxR} stroke="rgba(28,18,41,.08)" />
-      <line x1={cx - maxR} y1={cy} x2={cx + maxR} y2={cy} stroke="rgba(28,18,41,.08)" />
-
-      <polygon
-        points={points}
-        fill="rgba(107,47,179,.09)"
-        stroke="#6B2FB3"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-        style={{ filter: "drop-shadow(0 0 6px rgba(107,47,179,.35))" }}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1] mix-blend-overlay"
+        style={{
+          background:
+            "radial-gradient(circle 260px at var(--mx,50%) var(--my,20%), rgba(255,255,255,.28), transparent 60%)",
+        }}
       />
-      {[top, right, bottom, left].map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="#F8F4EC" stroke="#A9812E" strokeWidth={2} />
-      ))}
 
-      <text
-        x={cx}
-        y={116}
-        textAnchor="middle"
-        fontFamily="var(--font-mono)"
-        fontSize={32}
-        fontWeight={600}
-        fill="#1C1229"
-      >
-        {score}
-      </text>
-      <text
-        x={cx}
-        y={132}
-        textAnchor="middle"
-        fontFamily="var(--font-mono)"
-        fontSize={8}
-        letterSpacing={1}
-        fill="#7A7190"
-      >
-        EDGE SCORE
-      </text>
+      <div className="relative z-[2] flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <span className="font-display font-bold text-white text-base">M</span>
+          <span className="font-mono text-[11px] tracking-[0.22em] text-white/85">
+            MERIDIAN
+          </span>
+        </div>
+        <span className="font-tier italic text-gold-card text-sm">
+          {account?.tier_label ?? "Obsidian"}
+        </span>
+      </div>
 
-      <text x={cx} y={18} textAnchor="middle" fontFamily="var(--font-mono)" fontSize={9} fill="#5C5470">
-        WIN RATE
-      </text>
-      <text x={cx + maxR + 6} y={cy + 4} textAnchor="start" fontFamily="var(--font-mono)" fontSize={9} fill="#5C5470">
-        EXPECTANCY
-      </text>
-      <text x={cx} y={cy + maxR + 16} textAnchor="middle" fontFamily="var(--font-mono)" fontSize={9} fill="#5C5470">
-        CONSISTENCIA
-      </text>
-      <text x={cx - maxR - 6} y={cy + 4} textAnchor="end" fontFamily="var(--font-mono)" fontSize={9} fill="#5C5470">
-        DISCIPLINA
-      </text>
-    </svg>
+      <div
+        className="w-10 h-[31px] rounded-md mb-5"
+        style={{ background: "linear-gradient(135deg,#F3DFA0,#B8934E)" }}
+      />
+
+      <div className="relative z-[2] font-mono text-white/90 text-base tracking-[0.14em] mb-6">
+        •••• •••• •••• {last4}
+      </div>
+
+      <div className="relative z-[2] flex items-start justify-between gap-3">
+        <div>
+          <div className="font-mono text-[9px] tracking-wider text-white/50 uppercase mb-1">
+            Titular
+          </div>
+          <div className="font-display text-[13px] text-white leading-tight">
+            {account?.is_funded ? "Cuenta fondeada" : account?.name ?? "Sin cuenta"}
+          </div>
+        </div>
+        <div>
+          <div className="font-mono text-[9px] tracking-wider text-white/50 uppercase mb-1">
+            Edge score
+          </div>
+          <div className="font-mono text-base font-semibold text-gold-card">
+            {trades.length === 0 ? "—" : edgeScore}
+          </div>
+        </div>
+        <div>
+          <div className="font-mono text-[9px] tracking-wider text-white/50 uppercase mb-1">
+            Balance
+          </div>
+          <div className="font-mono text-base font-semibold text-gold-card">
+            {isLoading ? "…" : `$${balance.toLocaleString("es")}`}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
