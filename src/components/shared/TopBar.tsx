@@ -32,7 +32,7 @@ export function TopBar() {
 
   return (
     <div className="flex items-center justify-between pb-5 mb-5 border-b border-hairline flex-wrap gap-4">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 md:hidden">
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-violet flex items-center justify-center flex-shrink-0">
           <span className="font-mono font-semibold text-xs text-void">M</span>
         </div>
@@ -45,6 +45,10 @@ export function TopBar() {
           </p>
         </div>
       </div>
+
+      <p className="hidden md:block font-mono text-[12px] text-ink-2">
+        Hola, {profile?.display_name ?? "..."}
+      </p>
 
       <div className="flex items-center gap-3 flex-wrap">
         <div
