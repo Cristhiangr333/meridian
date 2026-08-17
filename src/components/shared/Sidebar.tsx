@@ -14,6 +14,7 @@ import {
   Sparkles,
   ChevronsLeft,
   ChevronsRight,
+  type LucideIcon,
 } from "lucide-react";
 
 const STORAGE_KEY = "meridian:sidebar-collapsed";
@@ -21,7 +22,7 @@ const STORAGE_KEY = "meridian:sidebar-collapsed";
 interface NavItem {
   href: string;
   label: string;
-  icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
+  icon: LucideIcon;
   comingSoon?: boolean;
 }
 
