@@ -3,13 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { useRealtimeSync } from "@/lib/supabase/realtime";
-
-export interface Setup {
-  id: string;
-  user_id: string;
-  name: string;
-  description: string | null;
-}
+import type { Setup } from "@/lib/types";
 
 export function useSetups() {
   useRealtimeSync("setups", ["setups"]);
