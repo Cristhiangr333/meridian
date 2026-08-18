@@ -1,4 +1,5 @@
 import type { Trade, PsychologyLog } from "@/lib/types";
+import { toLocalDateKey } from "@/lib/utils";
 
 function closedTrades(trades: Trade[]): Trade[] {
   return trades.filter((t) => t.pnl !== null);
@@ -57,17 +58,24 @@ export function computeEquitySeries(
   const closed = [...closedTrades(trades)].sort(
     (a, b) => new Date(a.opened_at).getTime() - new Date(b.opened_at).getTime()
   );
+  if (closed.length === 0) return [];
+
+  // El primer punto es el balance inicial (sin movimiento todavía) para que
+  // la curva arranque en un punto real y no ya adelantada por el primer
+  // trade — así el gráfico refleja de verdad "de dónde a dónde" fue la cuenta.
   let running = startingBalance;
-  return closed.map((t) => {
+  const series: EquityPoint[] = [{ date: closed[0].opened_at, value: startingBalance }];
+  closed.forEach((t) => {
     running += t.pnl ?? 0;
-    return { date: t.opened_at, value: running };
+    series.push({ date: t.opened_at, value: running });
   });
+  return series;
 }
 
 export function computeDailyPnl(trades: Trade[]): Map<string, number> {
   const map = new Map<string, number>();
   closedTrades(trades).forEach((t) => {
-    const day = t.opened_at.slice(0, 10);
+    const day = toLocalDateKey(t.opened_at);
     map.set(day, (map.get(day) ?? 0) + (t.pnl ?? 0));
   });
   return map;
@@ -109,7 +117,7 @@ export function computeMonthGrid(
   const byDay = new Map<string, Trade[]>();
 
   closedTrades(trades).forEach((t) => {
-    const key = t.opened_at.slice(0, 10);
+    const key = toLocalDateKey(t.opened_at);
     const arr = byDay.get(key) ?? [];
     arr.push(t);
     byDay.set(key, arr);
