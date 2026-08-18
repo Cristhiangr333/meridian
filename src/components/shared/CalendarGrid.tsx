@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import type { Trade } from "@/lib/types";
 import { computeMonthGrid, computeMonthSummary } from "@/lib/metrics";
+import { toLocalDateKey } from "@/lib/utils";
 
 const MONTH_NAMES = [
   "enero",
@@ -57,7 +58,7 @@ export function CalendarGrid({ trades }: { trades: Trade[] }) {
   const selected = selectedDay
     ? days.find((d) => d.dateKey === selectedDay)
     : null;
-  const todayKey = now.toISOString().slice(0, 10);
+  const todayKey = toLocalDateKey(now);
 
   return (
     <div>
