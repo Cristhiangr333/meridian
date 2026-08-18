@@ -306,3 +306,262 @@ export function computeEdgeScore(trades: Trade[]): number {
     winRate * 0.3 + pfNorm * 0.3 + consistency * 0.2 + discipline * 0.2
   );
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// Biblioteca de Setups
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface SetupPerformance {
+  setupId: string;
+  name: string;
+  description: string | null;
+  totalTrades: number;
+  winRate: number;
+  expectancy: number;
+  profitFactor: number;
+  avgRR: number | null;
+  netPnl: number;
+}
+
+/**
+ * Rendimiento real por setup — la misma lógica que ya se usaba embebida
+ * dentro de TradeForm (`setupStats`), ahora centralizada y con más
+ * profundidad (expectancy, profit factor, RR promedio) para reutilizarse
+ * en la Biblioteca de Setups y en cualquier otro lugar que la necesite.
+ */
+export function computeSetupPerformance(
+  trades: Trade[],
+  setups: { id: string; name: string; description: string | null }[]
+): SetupPerformance[] {
+  return setups.map((setup) => {
+    const setupTrades = closedTrades(trades).filter((t) => t.setup_id === setup.id);
+    const rrValues = setupTrades
+      .map((t) => t.rr_realized ?? t.rr_planned)
+      .filter((v): v is number => typeof v === "number");
+
+    return {
+      setupId: setup.id,
+      name: setup.name,
+      description: setup.description,
+      totalTrades: setupTrades.length,
+      winRate: computeWinRate(setupTrades),
+      expectancy: computeExpectancy(setupTrades),
+      profitFactor: computeProfitFactor(setupTrades),
+      avgRR:
+        rrValues.length === 0
+          ? null
+          : Math.round((rrValues.reduce((s, v) => s + v, 0) / rrValues.length) * 100) / 100,
+      netPnl: Math.round(setupTrades.reduce((s, t) => s + (t.pnl ?? 0), 0) * 100) / 100,
+    };
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Estadísticas Avanzadas
+// ─────────────────────────────────────────────────────────────────────────
+
+const WEEKDAY_LABELS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+export interface BucketPerformance {
+  label: string;
+  totalTrades: number;
+  winRate: number;
+  netPnl: number;
+  expectancy: number;
+}
+
+/** Rendimiento agrupado por día de la semana (en hora LOCAL del trader). */
+export function computePerformanceByWeekday(trades: Trade[]): BucketPerformance[] {
+  const buckets = new Map<number, Trade[]>();
+  closedTrades(trades).forEach((t) => {
+    const day = new Date(t.opened_at).getDay();
+    buckets.set(day, [...(buckets.get(day) ?? []), t]);
+  });
+
+  return [1, 2, 3, 4, 5, 6, 0]
+    .map((day) => {
+      const dayTrades = buckets.get(day) ?? [];
+      return {
+        label: WEEKDAY_LABELS[day],
+        totalTrades: dayTrades.length,
+        winRate: computeWinRate(dayTrades),
+        netPnl: Math.round(dayTrades.reduce((s, t) => s + (t.pnl ?? 0), 0) * 100) / 100,
+        expectancy: computeExpectancy(dayTrades),
+      };
+    })
+    .filter((b) => b.totalTrades > 0);
+}
+
+/** Rendimiento agrupado por activo operado. */
+export function computePerformanceByAsset(trades: Trade[]): BucketPerformance[] {
+  const buckets = new Map<string, Trade[]>();
+  closedTrades(trades).forEach((t) => {
+    buckets.set(t.asset, [...(buckets.get(t.asset) ?? []), t]);
+  });
+
+  return Array.from(buckets.entries())
+    .map(([asset, assetTrades]) => ({
+      label: asset,
+      totalTrades: assetTrades.length,
+      winRate: computeWinRate(assetTrades),
+      netPnl: Math.round(assetTrades.reduce((s, t) => s + (t.pnl ?? 0), 0) * 100) / 100,
+      expectancy: computeExpectancy(assetTrades),
+    }))
+    .sort((a, b) => b.netPnl - a.netPnl);
+}
+
+const SESSION_RANGES: { label: string; startUtc: number; endUtc: number }[] = [
+  { label: "Sídney", startUtc: 21, endUtc: 6 },
+  { label: "Tokio", startUtc: 0, endUtc: 9 },
+  { label: "Londres", startUtc: 7, endUtc: 16 },
+  { label: "Nueva York", startUtc: 12, endUtc: 21 },
+];
+
+function sessionForHourUtc(hourUtc: number): string {
+  const matches = SESSION_RANGES.filter((s) =>
+    s.startUtc < s.endUtc
+      ? hourUtc >= s.startUtc && hourUtc < s.endUtc
+      : hourUtc >= s.startUtc || hourUtc < s.endUtc
+  );
+  // Si hay solapamiento (dos sesiones activas a la vez, algo común en forex),
+  // se prioriza la que tenga más volumen histórico de referencia.
+  return matches[0]?.label ?? "Fuera de sesión";
+}
+
+/** Rendimiento agrupado por sesión de mercado (Sídney/Tokio/Londres/NY), en UTC real. */
+export function computePerformanceBySession(trades: Trade[]): BucketPerformance[] {
+  const buckets = new Map<string, Trade[]>();
+  closedTrades(trades).forEach((t) => {
+    const hourUtc = new Date(t.opened_at).getUTCHours();
+    const session = sessionForHourUtc(hourUtc);
+    buckets.set(session, [...(buckets.get(session) ?? []), t]);
+  });
+
+  return Array.from(buckets.entries())
+    .map(([label, sessionTrades]) => ({
+      label,
+      totalTrades: sessionTrades.length,
+      winRate: computeWinRate(sessionTrades),
+      netPnl: Math.round(sessionTrades.reduce((s, t) => s + (t.pnl ?? 0), 0) * 100) / 100,
+      expectancy: computeExpectancy(sessionTrades),
+    }))
+    .sort((a, b) => b.netPnl - a.netPnl);
+}
+
+export interface StreakStats {
+  current: { type: "win" | "loss" | "none"; count: number };
+  bestWinStreak: number;
+  worstLossStreak: number;
+}
+
+/** Rachas ganadoras/perdedoras, ordenadas por fecha de apertura real. */
+export function computeStreaks(trades: Trade[]): StreakStats {
+  const sorted = [...closedTrades(trades)].sort(
+    (a, b) => new Date(a.opened_at).getTime() - new Date(b.opened_at).getTime()
+  );
+
+  let bestWin = 0;
+  let worstLoss = 0;
+  let runningWin = 0;
+  let runningLoss = 0;
+
+  sorted.forEach((t) => {
+    if ((t.pnl ?? 0) > 0) {
+      runningWin += 1;
+      runningLoss = 0;
+    } else if ((t.pnl ?? 0) < 0) {
+      runningLoss += 1;
+      runningWin = 0;
+    } else {
+      runningWin = 0;
+      runningLoss = 0;
+    }
+    bestWin = Math.max(bestWin, runningWin);
+    worstLoss = Math.max(worstLoss, runningLoss);
+  });
+
+  let current: StreakStats["current"] = { type: "none", count: 0 };
+  if (runningWin > 0) current = { type: "win", count: runningWin };
+  else if (runningLoss > 0) current = { type: "loss", count: runningLoss };
+
+  return { current, bestWinStreak: bestWin, worstLossStreak: worstLoss };
+}
+
+export interface RMultipleBucket {
+  label: string;
+  count: number;
+}
+
+/** Distribución de operaciones por múltiplo de R realizado, en baldes fijos. */
+export function computeRMultipleDistribution(trades: Trade[]): RMultipleBucket[] {
+  const ranges: { label: string; min: number; max: number }[] = [
+    { label: "< -2R", min: -Infinity, max: -2 },
+    { label: "-2R a -1R", min: -2, max: -1 },
+    { label: "-1R a 0R", min: -1, max: 0 },
+    { label: "0R a 1R", min: 0, max: 1 },
+    { label: "1R a 2R", min: 1, max: 2 },
+    { label: "2R a 3R", min: 2, max: 3 },
+    { label: "> 3R", min: 3, max: Infinity },
+  ];
+
+  const values = closedTrades(trades)
+    .map((t) => t.rr_realized)
+    .filter((v): v is number => typeof v === "number");
+
+  return ranges.map((r) => ({
+    label: r.label,
+    count: values.filter((v) => v > r.min && v <= r.max).length,
+  }));
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Objetivos y Metas
+// ─────────────────────────────────────────────────────────────────────────
+
+export type GoalMetricKey =
+  | "win_rate"
+  | "expectancy"
+  | "profit_factor"
+  | "edge_score"
+  | "discipline"
+  | "consistency"
+  | "net_pnl";
+
+export const GOAL_METRIC_LABELS: Record<GoalMetricKey, string> = {
+  win_rate: "Win rate (%)",
+  expectancy: "Expectancy ($)",
+  profit_factor: "Profit factor",
+  edge_score: "Edge score",
+  discipline: "Disciplina",
+  consistency: "Consistencia (%)",
+  net_pnl: "PnL neto ($)",
+};
+
+/**
+ * Valor ACTUAL de una métrica de objetivo, calculado en vivo a partir de
+ * las operaciones reales — nunca se guarda un valor cacheado en `goals`,
+ * así nunca puede quedar desactualizado (principio: "el dato es un activo,
+ * no un registro").
+ */
+export function computeGoalCurrentValue(metric: GoalMetricKey, trades: Trade[]): number {
+  switch (metric) {
+    case "win_rate":
+      return computeWinRate(trades);
+    case "expectancy":
+      return computeExpectancy(trades);
+    case "profit_factor": {
+      const pf = computeProfitFactor(trades);
+      return pf === Infinity ? 999 : pf;
+    }
+    case "edge_score":
+      return computeEdgeScore(trades);
+    case "discipline":
+      return computeDiscipline(trades);
+    case "consistency":
+      return computeConsistency(trades);
+    case "net_pnl":
+      return Math.round(closedTrades(trades).reduce((s, t) => s + (t.pnl ?? 0), 0) * 100) / 100;
+    default:
+      return 0;
+  }
+}
