@@ -63,3 +63,15 @@ export interface Setup {
   description: string | null;
   created_at: string;
 }
+
+export interface Goal {
+  id: string;
+  user_id: string;
+  title: string;
+  target_metric: string;
+  target_value: number | null;
+  current_value: number | null;
+  deadline: string | null;
+  status: "active" | "achieved" | "abandoned";
+  created_at: string;
+}
