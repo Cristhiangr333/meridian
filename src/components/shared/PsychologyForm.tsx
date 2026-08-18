@@ -2,9 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 import { useLogPsychology } from "@/lib/hooks/useLogPsychology";
+import { toLocalDateKey } from "@/lib/utils";
 
 function todayISO() {
-  return new Date().toISOString().slice(0, 10);
+  return toLocalDateKey(new Date());
 }
 
 export function PsychologyForm() {
