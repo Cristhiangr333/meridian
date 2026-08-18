@@ -31,15 +31,13 @@ const CORE_ITEMS: NavItem[] = [
   { href: "/trades", label: "Registro", icon: NotebookPen },
   { href: "/calendar", label: "Calendario", icon: CalendarDays },
   { href: "/psychology", label: "Psicología", icon: Brain },
+  { href: "/setups", label: "Setups", icon: Layers },
+  { href: "/statistics", label: "Estadísticas", icon: BarChart3 },
+  { href: "/goals", label: "Objetivos", icon: Target },
 ];
 
-// Módulos definidos en la hoja de ruta pero aún no construidos. Quedan
-// visibles y deshabilitados a propósito: le muestran al trader hacia dónde
-// va la plataforma en vez de esconder el roadmap.
+// Módulos definidos en la hoja de ruta pero aún no construidos.
 const GROWTH_ITEMS: NavItem[] = [
-  { href: "/setups", label: "Setups", icon: Layers, comingSoon: true },
-  { href: "/statistics", label: "Estadísticas", icon: BarChart3, comingSoon: true },
-  { href: "/goals", label: "Objetivos", icon: Target, comingSoon: true },
   { href: "/coach", label: "AI Coach", icon: Sparkles, comingSoon: true },
 ];
 
