@@ -5,6 +5,7 @@ import { useSetups } from "@/lib/hooks/useSetups";
 import { useTrades } from "@/lib/hooks/useTrades";
 import { useCreateTrade } from "@/lib/hooks/useCreateTrade";
 import type { TradeDirection } from "@/lib/types";
+import { toDatetimeLocalValue } from "@/lib/utils";
 
 export function TradeForm({ accountId }: { accountId: string }) {
   const { data: setups = [] } = useSetups();
@@ -13,6 +14,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
 
   const [asset, setAsset] = useState("EUR/USD");
   const [direction, setDirection] = useState<TradeDirection>("long");
+  const [openedAt, setOpenedAt] = useState(() => toDatetimeLocalValue());
   const [entry, setEntry] = useState("1.0850");
   const [stop, setStop] = useState("1.0810");
   const [target, setTarget] = useState("1.0950");
@@ -65,6 +67,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
       account_id: accountId,
       asset,
       direction,
+      opened_at: new Date(openedAt).toISOString(),
       entry_price: parseFloat(entry),
       stop_price: stop ? parseFloat(stop) : null,
       target_price: target ? parseFloat(target) : null,
@@ -78,6 +81,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
     setSuccess(true);
     setPnl("");
     setNotes("");
+    setOpenedAt(toDatetimeLocalValue());
     setTimeout(() => setSuccess(false), 2500);
   }
 
@@ -101,15 +105,29 @@ export function TradeForm({ accountId }: { accountId: string }) {
         </div>
       )}
 
-      <div className="mb-4">
-        <label className="block font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1.5">
-          Activo
-        </label>
-        <input
-          value={asset}
-          onChange={(e) => setAsset(e.target.value)}
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        <div>
+          <label className="block font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1.5">
+            Activo
+          </label>
+          <input
+            value={asset}
+            onChange={(e) => setAsset(e.target.value)}
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          />
+        </div>
+        <div>
+          <label className="block font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1.5">
+            Fecha y hora
+          </label>
+          <input
+            type="datetime-local"
+            value={openedAt}
+            onChange={(e) => setOpenedAt(e.target.value)}
+            max={toDatetimeLocalValue()}
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          />
+        </div>
       </div>
 
       <div className="mb-4">
