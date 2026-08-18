@@ -1,3 +1,5 @@
+import { toLocalDateKey } from "@/lib/utils";
+
 export function Heatmap({ dailyPnl }: { dailyPnl: Map<string, number> }) {
   const days: { key: string; value: number | null }[] = [];
   const today = new Date();
@@ -5,7 +7,7 @@ export function Heatmap({ dailyPnl }: { dailyPnl: Map<string, number> }) {
   for (let i = 34; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
+    const key = toLocalDateKey(d);
     days.push({ key, value: dailyPnl.has(key) ? dailyPnl.get(key)! : null });
   }
 
