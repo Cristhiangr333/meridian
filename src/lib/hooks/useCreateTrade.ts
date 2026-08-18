@@ -8,6 +8,7 @@ export interface NewTradeInput {
   account_id: string;
   asset: string;
   direction: TradeDirection;
+  opened_at: string;
   entry_price: number;
   stop_price: number | null;
   target_price: number | null;
