@@ -13,15 +13,17 @@ export function PsychologyHistory({ logs }: { logs: PsychologyLog[] }) {
           {logs.slice(0, 10).map((l) => (
             <div
               key={l.id}
-              className="flex items-center justify-between py-2.5 border-b border-hairline last:border-b-0"
+              className="flex items-center justify-between py-2.5 border-b border-hairline last:border-b-0 gap-3 flex-wrap"
             >
-              <p className="font-mono text-xs text-ink-2">
+              <p className="font-mono text-xs text-ink-2 flex-shrink-0">
                 {new Date(l.log_date + "T00:00:00").toLocaleDateString("es")}
               </p>
-              <div className="flex gap-3 font-mono text-[11px] text-ink-3">
+              <div className="flex gap-2.5 font-mono text-[10.5px] text-ink-3 flex-wrap justify-end">
                 <span>😴 {l.sleep_hours ?? "—"}h</span>
-                <span>💪 {l.confidence ?? "—"}/10</span>
-                <span>⚡ {l.stress ?? "—"}/10</span>
+                <span>💪 {l.confidence ?? "—"}</span>
+                <span>⚡ {l.stress ?? "—"}</span>
+                <span>🎯 {l.focus ?? "—"}</span>
+                <span>🔥 {l.motivation ?? "—"}</span>
               </div>
             </div>
           ))}
