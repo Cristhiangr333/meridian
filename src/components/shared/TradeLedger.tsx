@@ -8,11 +8,9 @@ export function TradeLedger({ trades }: { trades: Trade[] }) {
   const weekTrades = closed.filter((t) => new Date(t.opened_at) >= oneWeekAgo);
   const weekTotal = weekTrades.reduce((s, t) => s + (t.pnl ?? 0), 0);
 
-  const recent = [...closed]
-    .sort(
-      (a, b) => new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime()
-    )
-    .slice(0, 12);
+  const recent = [...closed].sort(
+    (a, b) => new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime()
+  );
 
   return (
     <div className="bg-surface-raised backdrop-blur-xl border border-hairline rounded-2xl p-5 md:p-6">
@@ -39,7 +37,7 @@ export function TradeLedger({ trades }: { trades: Trade[] }) {
           Aún no hay operaciones registradas.
         </p>
       ) : (
-        <div>
+        <div className="max-h-[520px] overflow-y-auto pr-1 -mr-1">
           {recent.map((t) => (
             <div
               key={t.id}
