@@ -2,20 +2,17 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
-import type { GoalMetricKey } from "@/lib/metrics";
 
-export interface GoalInput {
-  title: string;
-  target_metric: GoalMetricKey;
-  target_value: number;
-  deadline: string | null;
+export interface SetupInput {
+  name: string;
+  description: string | null;
 }
 
-export function useCreateGoal() {
+export function useCreateSetup() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: GoalInput) => {
+    mutationFn: async (input: SetupInput) => {
       const supabase = createClient();
       const {
         data: { user },
@@ -23,49 +20,46 @@ export function useCreateGoal() {
       if (!user) throw new Error("No hay sesión activa.");
 
       const { error } = await supabase
-        .from("goals")
-        .insert({ ...input, user_id: user.id, status: "active" });
+        .from("setups")
+        .insert({ ...input, user_id: user.id });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["setups"] });
     },
   });
 }
 
-export function useUpdateGoalStatus() {
+export function useUpdateSetup() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      status,
-    }: {
-      id: string;
-      status: "active" | "achieved" | "abandoned";
-    }) => {
+    mutationFn: async ({ id, ...input }: SetupInput & { id: string }) => {
       const supabase = createClient();
-      const { error } = await supabase.from("goals").update({ status }).eq("id", id);
+      const { error } = await supabase.from("setups").update(input).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["setups"] });
     },
   });
 }
 
-export function useDeleteGoal() {
+export function useDeleteSetup() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (id: string) => {
       const supabase = createClient();
-      const { error } = await supabase.from("goals").delete().eq("id", id);
+      const { error } = await supabase.from("setups").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["setups"] });
+      // Un trade que apuntaba a este setup ahora tiene setup_id = null
+      // (ON DELETE SET NULL en el esquema) — refrescamos también trades.
+      queryClient.invalidateQueries({ queryKey: ["trades"] });
     },
   });
 }
