@@ -26,18 +26,24 @@ interface NavItem {
   comingSoon?: boolean;
 }
 
-const CORE_ITEMS: NavItem[] = [
+const DAILY_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/trades", label: "Registro", icon: NotebookPen },
   { href: "/calendar", label: "Calendario", icon: CalendarDays },
   { href: "/psychology", label: "Psicología", icon: Brain },
+];
+
+// Módulos de reflexión periódica, no de uso diario: se consultan/editan
+// cada tanto (al crear un setup nuevo, al revisar el mes, al fijar una meta),
+// no en cada sesión de trading — por eso viven en su propio grupo.
+const ANALYSIS_ITEMS: NavItem[] = [
   { href: "/setups", label: "Setups", icon: Layers },
   { href: "/statistics", label: "Estadísticas", icon: BarChart3 },
   { href: "/goals", label: "Objetivos", icon: Target },
 ];
 
 // Módulos definidos en la hoja de ruta pero aún no construidos.
-const GROWTH_ITEMS: NavItem[] = [
+const UPCOMING_ITEMS: NavItem[] = [
   { href: "/coach", label: "AI Coach", icon: Sparkles, comingSoon: true },
 ];
 
@@ -135,10 +141,10 @@ export function Sidebar() {
         <div className="space-y-1">
           {!collapsed && (
             <p className="font-mono text-[9.5px] tracking-widest uppercase text-ink-3 px-3 mb-1.5">
-              Núcleo
+              Diario
             </p>
           )}
-          {CORE_ITEMS.map((item) => (
+          {DAILY_ITEMS.map((item) => (
             <NavLink
               key={item.href}
               item={item}
@@ -151,10 +157,26 @@ export function Sidebar() {
         <div className="space-y-1">
           {!collapsed && (
             <p className="font-mono text-[9.5px] tracking-widest uppercase text-ink-3 px-3 mb-1.5">
-              Crecimiento
+              Análisis
             </p>
           )}
-          {GROWTH_ITEMS.map((item) => (
+          {ANALYSIS_ITEMS.map((item) => (
+            <NavLink
+              key={item.href}
+              item={item}
+              collapsed={collapsed}
+              active={!!pathname?.startsWith(item.href)}
+            />
+          ))}
+        </div>
+
+        <div className="space-y-1">
+          {!collapsed && (
+            <p className="font-mono text-[9.5px] tracking-widest uppercase text-ink-3 px-3 mb-1.5">
+              Próximamente
+            </p>
+          )}
+          {UPCOMING_ITEMS.map((item) => (
             <NavLink key={item.href} item={item} collapsed={collapsed} active={false} />
           ))}
         </div>
