@@ -69,7 +69,7 @@ export function PsychologyForm() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
         <div>
@@ -81,7 +81,7 @@ export function PsychologyForm() {
             step="0.5"
             value={sleep}
             onChange={(e) => setSleep(e.target.value)}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
       </div>
@@ -97,7 +97,7 @@ export function PsychologyForm() {
             max={10}
             value={s.value}
             onChange={(e) => s.setValue(parseInt(e.target.value))}
-            className="w-full accent-violet"
+            className="w-full accent-signal"
           />
         </div>
       ))}
@@ -111,14 +111,14 @@ export function PsychologyForm() {
           onChange={(e) => setNotes(e.target.value)}
           rows={3}
           placeholder="¿Cómo te sientes hoy respecto al mercado?"
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-body text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft resize-y"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-body text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft resize-y"
         />
       </div>
 
       <button
         type="submit"
         disabled={logPsychology.isPending}
-        className="w-full bg-gradient-to-r from-violet to-[#8B3FA0] text-white font-display font-semibold text-sm rounded-xl py-3 shadow-[0_14px_30px_-12px_rgba(107,47,179,.5)] disabled:opacity-60 transition"
+        className="w-full bg-signal text-[#06141F] font-display font-semibold text-sm rounded-xl py-3 shadow-[0_14px_30px_-12px_rgba(125,211,252,.35)] disabled:opacity-60 transition"
       >
         {logPsychology.isPending ? "Guardando..." : "Guardar registro"}
       </button>
