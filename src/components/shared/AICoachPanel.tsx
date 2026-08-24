@@ -39,7 +39,7 @@ export function AICoachPanel() {
         <button
           onClick={handleGenerate}
           disabled={aiCoach.isPending || closedCount === 0}
-          className="bg-gradient-to-r from-violet to-[#8B3FA0] text-white font-mono text-xs font-semibold rounded-full px-4 py-2 disabled:opacity-50 transition"
+          className="bg-signal text-[#06141F] font-mono text-xs font-semibold rounded-full px-4 py-2 disabled:opacity-50 transition"
         >
           {aiCoach.isPending ? "Analizando..." : "Generar análisis"}
         </button>
@@ -63,9 +63,9 @@ export function AICoachPanel() {
           {insights.map((ins) => (
             <div
               key={ins.id}
-              className="flex items-start gap-3 bg-gold-soft border border-gold/30 rounded-2xl px-4 py-3.5"
+              className="flex items-start gap-3 bg-amber-soft border border-amber/30 rounded-2xl px-4 py-3.5"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 flex-shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(232,163,61,.8)]" />
               <div>
                 <p className="font-body text-sm text-ink-1 leading-relaxed">
                   {ins.content}
