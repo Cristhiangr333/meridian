@@ -88,7 +88,7 @@ function NavLink({
       aria-current={active ? "page" : undefined}
       className={`${baseClasses} ${
         active
-          ? "bg-violet-soft text-violet"
+          ? "bg-signal-soft text-signal"
           : "text-ink-2 hover:bg-hairline/50 hover:text-ink-1"
       }`}
     >
@@ -127,12 +127,14 @@ export function Sidebar() {
           collapsed ? "justify-center px-0" : ""
         }`}
       >
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-violet flex items-center justify-center flex-shrink-0">
-          <span className="font-mono font-semibold text-xs text-void">M</span>
-        </div>
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" className="flex-shrink-0">
+          <circle cx="13" cy="13" r="11.5" stroke="#7DD3FC" strokeWidth="1" opacity="0.5" />
+          <ellipse cx="13" cy="13" rx="11.5" ry="4.2" stroke="#7DD3FC" strokeWidth="1" opacity="0.8" />
+          <line x1="13" y1="1.5" x2="13" y2="24.5" stroke="#7DD3FC" strokeWidth="1" opacity="0.5" />
+        </svg>
         {!collapsed && (
           <span className="font-display text-[15px] font-semibold text-ink-1">
-            Meridian
+            Meridi<span className="text-signal">a</span>n
           </span>
         )}
       </div>
@@ -184,7 +186,7 @@ export function Sidebar() {
 
       <button
         onClick={toggle}
-        className={`flex items-center gap-2 px-3 py-3 border-t border-hairline text-ink-3 hover:text-violet transition font-mono text-[11px] flex-shrink-0 ${
+        className={`flex items-center gap-2 px-3 py-3 border-t border-hairline text-ink-3 hover:text-signal transition font-mono text-[11px] flex-shrink-0 ${
           collapsed ? "justify-center" : ""
         }`}
       >
