@@ -94,7 +94,7 @@ export function GoalCard({
           <div className="h-2 rounded-full bg-hairline overflow-hidden mb-2">
             <div
               className={`h-full rounded-full transition-all ${
-                isDone ? "bg-gain" : isOverdue ? "bg-loss" : "bg-violet"
+                isDone ? "bg-gain" : isOverdue ? "bg-loss" : "bg-signal"
               }`}
               style={{ width: `${Math.max(progressPct, 2)}%` }}
             />
