@@ -26,8 +26,8 @@ export function NavTabs() {
             href={tab.href}
             className={`font-mono text-[12px] px-3.5 py-1.5 rounded-full transition ${
               active
-                ? "bg-violet-soft text-violet"
-                : "text-ink-2 hover:text-violet"
+                ? "bg-signal-soft text-signal"
+                : "text-ink-2 hover:text-signal"
             }`}
           >
             {tab.label}
