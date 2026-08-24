@@ -25,7 +25,7 @@ export function PsychologyCorrelation({
           Registra al menos 3 días con operaciones cerradas Y diario
           psicológico completado ese mismo día para descubrir qué estados te
           hacen operar mejor o peor.{" "}
-          <Link href="/psychology" className="text-violet hover:underline">
+          <Link href="/psychology" className="text-signal hover:underline">
             Ir al Diario Psicológico →
           </Link>
         </p>
