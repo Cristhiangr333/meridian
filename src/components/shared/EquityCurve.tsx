@@ -33,7 +33,7 @@ export function EquityCurve({ series }: { series: EquityPoint[] }) {
 
   const line = "M" + points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" L");
   const area = `${line} L${w},${h} L0,${h} Z`;
-  const strokeColor = isUp ? "#0E9F6E" : "#D1315C";
+  const strokeColor = isUp ? "#34D399" : "#F87171";
 
   return (
     <div>
