@@ -47,7 +47,7 @@ export default function SetupsPage() {
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-1.5 font-mono text-xs bg-violet text-white px-3.5 py-2 rounded-xl hover:bg-violet/90 transition"
+            className="flex items-center gap-1.5 font-mono text-xs bg-signal text-[#06141F] px-3.5 py-2 rounded-xl hover:bg-signal/90 transition shadow-[0_0_20px_rgba(125,211,252,.25)]"
           >
             <Plus size={14} />
             Nuevo setup
