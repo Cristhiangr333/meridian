@@ -47,7 +47,7 @@ export default function RegisterPage() {
         </p>
         <Link
           href="/login"
-          className="inline-block text-violet font-medium text-sm mt-2"
+          className="inline-block text-signal font-medium text-sm mt-2"
         >
           Volver a iniciar sesión
         </Link>
@@ -80,7 +80,7 @@ export default function RegisterPage() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           placeholder="Tu nombre"
         />
       </div>
@@ -94,7 +94,7 @@ export default function RegisterPage() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           placeholder="tu@correo.com"
         />
       </div>
@@ -109,7 +109,7 @@ export default function RegisterPage() {
           minLength={6}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           placeholder="Mínimo 6 caracteres"
         />
       </div>
@@ -117,14 +117,14 @@ export default function RegisterPage() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-gradient-to-r from-violet to-[#8B3FA0] text-white font-display font-semibold text-sm rounded-xl py-3 shadow-[0_14px_30px_-12px_rgba(107,47,179,.5)] disabled:opacity-60 transition"
+        className="w-full bg-signal text-[#06141F] font-display font-semibold text-sm rounded-xl py-3 shadow-[0_14px_30px_-12px_rgba(125,211,252,.35)] disabled:opacity-60 transition"
       >
         {loading ? "Creando..." : "Crear cuenta"}
       </button>
 
       <p className="text-center text-sm text-ink-2">
         ¿Ya tienes cuenta?{" "}
-        <Link href="/login" className="text-violet font-medium">
+        <Link href="/login" className="text-signal font-medium">
           Inicia sesión
         </Link>
       </p>
