@@ -24,14 +24,14 @@ export function AICoachCard({
   }
 
   return (
-    <div className="flex items-start justify-between gap-3 bg-gold-soft border border-gold/30 rounded-2xl px-4 py-3.5">
+    <div className="flex items-start justify-between gap-3 bg-amber-soft border border-amber/30 rounded-2xl px-4 py-3.5">
       <div className="flex items-start gap-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 flex-shrink-0" />
+        <span className="w-1.5 h-1.5 rounded-full bg-amber mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(232,163,61,.8)]" />
         <p className="font-body text-sm text-ink-1 leading-relaxed">{message}</p>
       </div>
       <Link
         href="/psychology"
-        className="font-mono text-[11px] text-gold whitespace-nowrap hover:underline flex-shrink-0 mt-0.5"
+        className="font-mono text-[11px] text-amber whitespace-nowrap hover:underline flex-shrink-0 mt-0.5"
       >
         AI Coach →
       </Link>
