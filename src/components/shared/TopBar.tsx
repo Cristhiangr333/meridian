@@ -33,12 +33,14 @@ export function TopBar() {
   return (
     <div className="flex items-center justify-between pb-5 mb-5 border-b border-hairline flex-wrap gap-4">
       <div className="flex items-center gap-3 md:hidden">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold to-violet flex items-center justify-center flex-shrink-0">
-          <span className="font-mono font-semibold text-xs text-void">M</span>
-        </div>
+        <svg width="24" height="24" viewBox="0 0 26 26" fill="none" className="flex-shrink-0">
+          <circle cx="13" cy="13" r="11.5" stroke="#7DD3FC" strokeWidth="1" opacity="0.5" />
+          <ellipse cx="13" cy="13" rx="11.5" ry="4.2" stroke="#7DD3FC" strokeWidth="1" opacity="0.8" />
+          <line x1="13" y1="1.5" x2="13" y2="24.5" stroke="#7DD3FC" strokeWidth="1" opacity="0.5" />
+        </svg>
         <div>
           <h1 className="font-display text-[17px] font-semibold text-ink-1 leading-none">
-            Meridian
+            Meridi<span className="text-signal">a</span>n
           </h1>
           <p className="font-mono text-[9.5px] tracking-widest text-ink-3 uppercase mt-0.5">
             {profile?.display_name ?? "Cargando..."}
@@ -70,7 +72,7 @@ export function TopBar() {
         </div>
         <button
           onClick={handleSignOut}
-          className="font-mono text-[11.5px] text-ink-2 border border-hairline-strong px-3 py-1.5 rounded-full hover:border-violet hover:text-violet transition"
+          className="font-mono text-[11.5px] text-ink-2 border border-hairline-strong px-3 py-1.5 rounded-full hover:border-signal hover:text-signal transition"
         >
           Cerrar sesión
         </button>
