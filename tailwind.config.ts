@@ -5,48 +5,52 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: "#F8F4EC",
+        // Base — deep marine navy, like the sky over open water
+        void: "#0A1220",
         surface: {
-          DEFAULT: "rgba(255,255,255,.55)",
-          raised: "rgba(255,255,255,.68)",
-          elevated: "rgba(255,255,255,.92)",
+          DEFAULT: "#101A2C",   // ink-raised: panels
+          raised: "#101A2C",
+          elevated: "#14213A",  // ink-elevated: nested cards, table cells
         },
         hairline: {
-          DEFAULT: "rgba(28,18,41,.08)",
-          strong: "rgba(28,18,41,.16)",
+          DEFAULT: "rgba(255,255,255,.055)",
+          strong: "rgba(255,255,255,.14)",
         },
-        violet: {
-          DEFAULT: "#6B2FB3",
-          soft: "rgba(107,47,179,.09)",
-          glow: "rgba(107,47,179,.28)",
+        // Primary brand accent — "signal", like a plotter trace. Reserved for
+        // data, active states, and the Meridian Line instrument. Never used
+        // for gain/loss semantics.
+        signal: {
+          DEFAULT: "#7DD3FC",
+          soft: "rgba(125,211,252,.12)",
+          glow: "rgba(125,211,252,.45)",
         },
-        gold: {
-          DEFAULT: "#A9812E",
-          soft: "rgba(169,129,46,.12)",
-          card: "#E8C878",
+        // Reserved exclusively for AI Coach / insights / risk warnings.
+        // Never decorative — its presence always means "pay attention".
+        amber: {
+          DEFAULT: "#E8A33D",
+          soft: "rgba(232,163,61,.12)",
         },
         gain: {
-          DEFAULT: "#0E9F6E",
-          soft: "rgba(14,159,110,.10)",
+          DEFAULT: "#34D399",
+          soft: "rgba(52,211,153,.10)",
         },
         loss: {
-          DEFAULT: "#D1315C",
-          soft: "rgba(209,49,92,.09)",
+          DEFAULT: "#F87171",
+          soft: "rgba(248,113,113,.10)",
         },
         ink: {
-          1: "#1C1229",
-          2: "#5C5470",
-          3: "#7A7190",
+          1: "#EAF2FB",
+          2: "#93A4BD",
+          3: "#5C6B84",
         },
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
         body: ["var(--font-body)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-        tier: ["var(--font-tier)", "serif"],
       },
       borderRadius: {
-        card: "16px",
+        card: "14px",
       },
     },
   },
