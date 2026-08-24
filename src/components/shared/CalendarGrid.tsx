@@ -67,7 +67,7 @@ export function CalendarGrid({ trades }: { trades: Trade[] }) {
           onClick={prevMonth}
           type="button"
           aria-label="Mes anterior"
-          className="w-8 h-8 rounded-lg border border-hairline-strong flex items-center justify-center text-ink-2 hover:border-violet hover:text-violet transition"
+          className="w-8 h-8 rounded-lg border border-hairline-strong flex items-center justify-center text-ink-2 hover:border-signal hover:text-signal transition"
         >
           ‹
         </button>
@@ -79,7 +79,7 @@ export function CalendarGrid({ trades }: { trades: Trade[] }) {
           onClick={nextMonth}
           type="button"
           aria-label="Mes siguiente"
-          className="w-8 h-8 rounded-lg border border-hairline-strong flex items-center justify-center text-ink-2 hover:border-violet hover:text-violet transition"
+          className="w-8 h-8 rounded-lg border border-hairline-strong flex items-center justify-center text-ink-2 hover:border-signal hover:text-signal transition"
         >
           ›
         </button>
@@ -110,7 +110,7 @@ export function CalendarGrid({ trades }: { trades: Trade[] }) {
           <p className="font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1.5">
             Mejor día
           </p>
-          <p className="font-mono text-xl font-semibold text-violet">
+          <p className="font-mono text-xl font-semibold text-gain">
             {summary.bestDay !== null ? `+$${summary.bestDay.toFixed(0)}` : "—"}
           </p>
         </div>
@@ -118,7 +118,7 @@ export function CalendarGrid({ trades }: { trades: Trade[] }) {
           <p className="font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1.5">
             Racha actual
           </p>
-          <p className="font-mono text-xl font-semibold text-gold">
+          <p className="font-mono text-xl font-semibold text-signal">
             {summary.currentStreak} {summary.currentStreak === 1 ? "día" : "días"}
           </p>
         </div>
@@ -149,8 +149,8 @@ export function CalendarGrid({ trades }: { trades: Trade[] }) {
               type="button"
               onClick={() => setSelectedDay(d.dateKey)}
               className={`h-16 md:h-20 rounded-lg border flex flex-col justify-between p-2 transition ${cls} ${
-                isSelected ? "ring-2 ring-violet" : ""
-              } ${isToday ? "border-violet border-[1.5px]" : ""}`}
+                isSelected ? "ring-2 ring-signal" : ""
+              } ${isToday ? "border-signal border-[1.5px]" : ""}`}
             >
               <span className="font-mono text-[10px] text-ink-2 text-left">
                 {d.dayNum}
