@@ -113,7 +113,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
           <input
             value={asset}
             onChange={(e) => setAsset(e.target.value)}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
         <div>
@@ -125,7 +125,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
             value={openedAt}
             onChange={(e) => setOpenedAt(e.target.value)}
             max={toDatetimeLocalValue()}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
       </div>
@@ -170,7 +170,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
             step="0.0001"
             value={entry}
             onChange={(e) => setEntry(e.target.value)}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
         <div>
@@ -182,7 +182,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
             step="0.0001"
             value={stop}
             onChange={(e) => setStop(e.target.value)}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
         <div>
@@ -194,22 +194,19 @@ export function TradeForm({ accountId }: { accountId: string }) {
             step="0.0001"
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            className="w-full bg-surface border border-hairline-strong rounded-xl px-3 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+            className="w-full bg-surface border border-hairline-strong rounded-xl px-3 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
           />
         </div>
       </div>
 
-      <div
-        className="rounded-2xl p-5 mb-4"
-        style={{
-          background:
-            "linear-gradient(125deg, #241145, #4B1F82 45%, #8B3FA0 90%)",
-        }}
-      >
-        <p className="font-mono text-[10.5px] tracking-wider uppercase text-white/60 mb-1">
+      <div className="rounded-2xl p-5 mb-4 bg-surface-elevated border border-hairline">
+        <p className="font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1">
           Ratio riesgo / beneficio
         </p>
-        <p className="font-mono text-3xl font-semibold text-gold-card">
+        <p
+          className="font-mono text-3xl font-semibold text-signal"
+          style={{ textShadow: "0 0 20px rgba(125,211,252,.35)" }}
+        >
           {rr !== null ? `${rr}R` : "—"}
         </p>
       </div>
@@ -226,7 +223,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
               onClick={() => setSetupId(s.id)}
               className={`px-3.5 py-2 rounded-full border font-mono text-xs transition ${
                 setupId === s.id
-                  ? "bg-violet-soft border-violet/40 text-violet"
+                  ? "bg-signal-soft border-signal/40 text-signal"
                   : "bg-surface border-hairline-strong text-ink-2"
               }`}
             >
@@ -242,11 +239,11 @@ export function TradeForm({ accountId }: { accountId: string }) {
       </div>
 
       {selectedSetup && selectedStats && selectedStats.total >= 3 && (
-        <div className="flex items-start gap-2.5 mt-3 mb-4 bg-gold-soft border border-gold/30 rounded-xl px-3.5 py-2.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold mt-1.5 flex-shrink-0" />
+        <div className="flex items-start gap-2.5 mt-3 mb-4 bg-amber-soft border border-amber/30 rounded-xl px-3.5 py-2.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber mt-1.5 flex-shrink-0 shadow-[0_0_8px_rgba(232,163,61,.8)]" />
           <p className="font-body text-[13px] text-ink-1 leading-snug">
             Este setup tiene{" "}
-            <span className="font-semibold text-gold">
+            <span className="font-semibold text-amber">
               {Math.round((selectedStats.wins / selectedStats.total) * 100)}%
             </span>{" "}
             de acierto en tu historial
@@ -278,7 +275,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
           value={pnl}
           onChange={(e) => setPnl(e.target.value)}
           placeholder="Ej: 186 o -74"
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
         />
       </div>
 
@@ -292,7 +289,7 @@ export function TradeForm({ accountId }: { accountId: string }) {
           max={10}
           value={confidence}
           onChange={(e) => setConfidence(parseInt(e.target.value))}
-          className="w-full accent-violet"
+          className="w-full accent-signal"
         />
       </div>
 
@@ -305,14 +302,14 @@ export function TradeForm({ accountId }: { accountId: string }) {
           onChange={(e) => setNotes(e.target.value)}
           rows={3}
           placeholder="¿Qué viste en el gráfico? ¿Seguiste tu plan?"
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-body text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft resize-y"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-body text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft resize-y"
         />
       </div>
 
       <button
         type="submit"
         disabled={createTrade.isPending}
-        className="w-full bg-gradient-to-r from-violet to-[#8B3FA0] text-white font-display font-semibold text-sm rounded-xl py-3 shadow-[0_14px_30px_-12px_rgba(107,47,179,.5)] disabled:opacity-60 transition"
+        className="w-full bg-signal text-[#06141F] font-display font-semibold text-sm rounded-xl py-3 shadow-[0_14px_30px_-12px_rgba(125,211,252,.35)] disabled:opacity-60 transition"
       >
         {createTrade.isPending ? "Guardando..." : "Guardar operación"}
       </button>
