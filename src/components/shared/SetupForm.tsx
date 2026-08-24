@@ -27,7 +27,7 @@ export function SetupForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-surface-raised backdrop-blur-xl border border-violet/30 rounded-2xl p-4 md:p-5 space-y-3"
+      className="bg-surface-raised backdrop-blur-xl border border-signal/30 rounded-2xl p-4 md:p-5 space-y-3"
     >
       <div>
         <label className="block font-mono text-[10.5px] tracking-wider uppercase text-ink-3 mb-1.5">
@@ -38,7 +38,7 @@ export function SetupForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Ej. Ruptura de rango"
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
         />
       </div>
       <div>
@@ -50,7 +50,7 @@ export function SetupForm({
           onChange={(e) => setDescription(e.target.value)}
           rows={2}
           placeholder="¿Qué condiciones tienen que cumplirse para tomar este setup?"
-          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 resize-none focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet-soft"
+          className="w-full bg-surface border border-hairline-strong rounded-xl px-3.5 py-2.5 font-mono text-sm text-ink-1 resize-none focus:outline-none focus:border-signal focus:ring-2 focus:ring-signal-soft"
         />
       </div>
       <div className="flex gap-2 justify-end">
@@ -64,7 +64,7 @@ export function SetupForm({
         <button
           type="submit"
           disabled={submitting || !name.trim()}
-          className="font-mono text-xs bg-violet text-white px-4 py-2 rounded-xl hover:bg-violet/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="font-mono text-xs bg-signal text-[#06141F] px-4 py-2 rounded-xl hover:bg-signal/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? "Guardando..." : "Guardar setup"}
         </button>
