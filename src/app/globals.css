@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,wght@1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,17 +8,43 @@
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-tier: 'Fraunces', serif;
 }
 
 body {
-  background:
-    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(107,47,179,.08), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 100% 5%, rgba(169,129,46,.07), transparent 60%),
-    radial-gradient(ellipse 800px 600px at 50% 115%, rgba(199,125,255,.06), transparent 60%),
-    #F8F4EC;
+  background-color: #0A1220;
+  background-image:
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+  background-size: 64px 64px;
   background-attachment: fixed;
-  color: #1C1229;
+  color: #EAF2FB;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar tuned to the instrument aesthetic — thin, quiet, never louder
+   than the data it scrolls past. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.10);
+  border-radius: 6px;
+  border: 2px solid #0A1220;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.18); }
+
+/* Focus states — always visible, per accessibility requirements. Signal
+   cyan doubles as the interaction color, so a focus ring reads as "this is
+   live", consistent with the rest of the instrument metaphor. */
+:focus-visible {
+  outline: 2px solid #7DD3FC;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
