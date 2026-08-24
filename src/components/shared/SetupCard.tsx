@@ -48,7 +48,7 @@ export function SetupCard({
         <div className="flex gap-1 flex-shrink-0">
           <button
             onClick={() => setEditing(true)}
-            className="text-ink-3 hover:text-violet transition p-1"
+            className="text-ink-3 hover:text-signal transition p-1"
             title="Editar setup"
           >
             <Pencil size={14} strokeWidth={1.75} />
