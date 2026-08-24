@@ -6,7 +6,6 @@ import { useInsights } from "@/lib/hooks/useInsights";
 import { usePsychologyLogs } from "@/lib/hooks/usePsychologyLogs";
 import { MetricCard } from "@/components/shared/MetricCard";
 import { EdgeCard } from "@/components/shared/EdgeCard";
-import { EdgeRadar } from "@/components/shared/EdgeRadar";
 import { EquityCurve } from "@/components/shared/EquityCurve";
 import { Heatmap } from "@/components/shared/Heatmap";
 import { AICoachCard } from "@/components/shared/AICoachCard";
@@ -18,9 +17,6 @@ import {
   computeMaxDrawdown,
   computeEquitySeries,
   computeDailyPnl,
-  computeConsistency,
-  computeDiscipline,
-  computeEdgeScore,
   computePsychologyCorrelation,
 } from "@/lib/metrics";
 
@@ -34,12 +30,8 @@ export default function DashboardPage() {
   const expectancy = computeExpectancy(trades);
   const profitFactor = computeProfitFactor(trades);
   const maxDD = computeMaxDrawdown(trades);
-  const consistency = computeConsistency(trades);
-  const discipline = computeDiscipline(trades);
-  const edgeScore = computeEdgeScore(trades);
   const equitySeries = computeEquitySeries(trades, account?.starting_balance ?? 0);
   const dailyPnl = computeDailyPnl(trades);
-  const expectancyNorm = Math.max(0, Math.min(100, 50 + expectancy));
   const psychologyCorrelation = computePsychologyCorrelation(trades, psychologyLogs);
 
   if (isLoading) {
@@ -59,29 +51,18 @@ export default function DashboardPage() {
 
       <EdgeCard />
 
-      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-3 mb-3">
-        <div className="bg-surface-raised backdrop-blur-xl border border-hairline rounded-2xl p-4 flex items-center justify-center">
-          <EdgeRadar
-            winRate={winRate}
-            expectancyNorm={expectancyNorm}
-            consistency={consistency}
-            discipline={discipline}
-            score={edgeScore}
-          />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <MetricCard
-            label="Expectancy"
-            value={`${expectancy >= 0 ? "+" : ""}$${expectancy}`}
-            tone={expectancy >= 0 ? "up" : "down"}
-          />
-          <MetricCard
-            label="Profit factor"
-            value={profitFactor === Infinity ? "∞" : `${profitFactor}`}
-          />
-          <MetricCard label="Win rate" value={`${winRate}%`} />
-          <MetricCard label="Max drawdown" value={`$${maxDD}`} tone="down" />
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+        <MetricCard
+          label="Expectancy"
+          value={`${expectancy >= 0 ? "+" : ""}$${expectancy}`}
+          tone={expectancy >= 0 ? "up" : "down"}
+        />
+        <MetricCard
+          label="Profit factor"
+          value={profitFactor === Infinity ? "∞" : `${profitFactor}`}
+        />
+        <MetricCard label="Win rate" value={`${winRate}%`} />
+        <MetricCard label="Max drawdown" value={`$${maxDD}`} tone="down" />
       </div>
 
       <div className="bg-surface-raised backdrop-blur-xl border border-hairline rounded-2xl p-4 md:p-5 mb-3">
