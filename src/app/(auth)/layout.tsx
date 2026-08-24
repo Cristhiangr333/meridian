@@ -7,12 +7,14 @@ export default function AuthLayout({
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="flex items-center gap-3 justify-center mb-8">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-gold to-violet flex items-center justify-center flex-shrink-0">
-            <span className="font-display font-bold text-void text-sm">M</span>
-          </div>
+          <svg width="30" height="30" viewBox="0 0 26 26" fill="none" className="flex-shrink-0">
+            <circle cx="13" cy="13" r="11.5" stroke="#7DD3FC" strokeWidth="1" opacity="0.5" />
+            <ellipse cx="13" cy="13" rx="11.5" ry="4.2" stroke="#7DD3FC" strokeWidth="1" opacity="0.8" />
+            <line x1="13" y1="1.5" x2="13" y2="24.5" stroke="#7DD3FC" strokeWidth="1" opacity="0.5" />
+          </svg>
           <div>
             <h1 className="font-display text-lg font-semibold text-ink-1 leading-none">
-              Meridian
+              Meridi<span className="text-signal">a</span>n
             </h1>
             <p className="font-mono text-[9.5px] tracking-widest text-ink-3 uppercase mt-0.5">
               Sistema de inteligencia de trading
@@ -20,7 +22,7 @@ export default function AuthLayout({
           </div>
         </div>
 
-        <div className="bg-surface-raised backdrop-blur-xl border border-hairline rounded-2xl p-7 md:p-8 shadow-[0_14px_40px_-20px_rgba(28,18,41,.14)]">
+        <div className="bg-surface border border-hairline rounded-2xl p-7 md:p-8 shadow-[0_20px_60px_-24px_rgba(0,0,0,.6)]">
           {children}
         </div>
       </div>
